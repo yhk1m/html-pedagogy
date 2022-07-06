@@ -1254,7 +1254,17 @@ document.write(" [ <font color=red>" + hitCt + "</font> ] 번째 방문자입니
 <br>
 <br>
 <br>
-<br>
-<br>
+    <h2>방명록</h2>
+  <form action="write_action.html" method="get">
+      제목  <input type="text" name="n_title" value="">
+      글쓴이 <input type="text" name="n_writer" value=""><br>
+      내용<br>
+      <textarea name="n_content" cols="80" rows="3"></textarea><br>
+      <input type="submit" value="등록">
+      <input type="reset" value="다시쓰기">
+    </form>
+    <br>
+    <br>
 <body>
 <b>제작 : 김용현</b>
+</html>
