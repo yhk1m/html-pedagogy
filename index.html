@@ -3,6 +3,7 @@
 <head>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
     <meta charset="UTF-8">
+    <title>html pedagogy yhk1m</title>
     <style>
         body {
             color: #555;
@@ -62,6 +63,7 @@
         #tab3:checked ~ #content3,
         #tab4:checked ~ #content4 {
             display: block;}
+        
                     .wrap {
               width: 500px;
             }
@@ -74,7 +76,15 @@
               line-height: 1.6;
             }
     </style>
-    <title>html pedagogy yhk1m</title>
+        <script>
+      $(document).ready(function() {
+        $('.wrap').on( 'keyup', 'textarea', function (e){
+          $(this).css('height', 'auto' );
+          $(this).height( this.scrollHeight );
+        });
+        $('.wrap').find( 'textarea' ).keyup();
+      });
+    </script>
 </head>
 <body>
 <h1><b>html 교육학</b></h1>
