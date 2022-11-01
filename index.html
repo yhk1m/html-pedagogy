@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
     <meta charset="UTF-8">
     <style>
         body {
@@ -61,6 +62,17 @@
         #tab3:checked ~ #content3,
         #tab4:checked ~ #content4 {
             display: block;}
+                    .wrap {
+              width: 500px;
+            }
+            .wrap textarea {
+              width: 100%;
+              resize: none;
+              overflow-y: hidden; /* prevents scroll bar flash */
+              padding: 0.4em; /* prevents text jump on Enter keypress */
+              padding-bottom: 0.4em;
+              line-height: 1.6;
+            }
     </style>
     <title>html pedagogy yhk1m</title>
 </head>
@@ -2398,6 +2410,7 @@
 <span id='001. 교육과정'>
 <h1><b>교육과정</b></h1>
 <br>
+<div class="wrap">
 1. 행동적 목표의 장점과 단점 <br>
 <textarea style="width:600px;length:400px"></textarea><br>
 2. 교육 내용의 선정 원리(타일러)<br>
@@ -2759,7 +2772,7 @@
 <textarea style="width:600px;length:300px"></textarea><br>
 30. 컨설팅 장학의 정의와 기본 원리<br>
 <textarea style="width:600px;length:300px"></textarea><br>
-
+    <br></div>
 </span>
         </p>
     </section>
