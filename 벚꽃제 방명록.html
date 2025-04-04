@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>벚꽃제 방명록</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Nanum Gothic', sans-serif;
+      background-color: #fff0f5;
+      padding: 20px;
+      position: relative;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    h3 {
+      color: #d63384;
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+      background-color: #ffe4ec;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    th, td {
+      padding: 10px;
+      border: none;
+      text-align: left;
+    }
+
+    th {
+      width: 120px;
+      color: #ad1457;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 95%;
+      padding: 8px;
+      border: 1px solid #f8bbd0;
+      border-radius: 6px;
+      background-color: #fff;
+    }
+
+    input[type="button"] {
+      padding: 8px 12px;
+      background-color: #f06292;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    input[type="button"]:hover {
+      background-color: #ec407a;
+    }
+
+    #list > div {
+      background-color: #fff8fa;
+      border: 1px solid #f8bbd0;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 20px auto;
+      max-width: 600px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #editf {
+      background-color: #fff0f5;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 20px auto;
+      max-width: 600px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="sakura"></canvas>
+
+<h3>🌸 벚꽃제 방명록 🌸</h3>
+
+<form name="f">
+  <table>
+    <tr>
+      <th>작성자</th>
+      <td><input type="text" name="writer" id="writer" required></td>
+    </tr>
+    <tr>
+      <th>비밀번호</th>
+      <td><input type="password" name="pwd" id="pwd" required></td>
+    </tr>
+    <tr>
+      <th>내용</th>
+      <td><input type="text" name="content" id="content" required></td>
+    </tr>
+    <tr>
+      <th>등록</th>
+      <td><input type="button" value="등록하기" onclick="a()"></td>
+    </tr>
+  </table>
+</form>
+
+<div id="list"></div>
+
+<!-- 수정 폼 -->
+<table id="editf" style="display: none;">
+  <tr>
+    <th>작성자</th>
+    <td><input type="text" id="editwriter"></td>
+  </tr>
+  <tr>
+    <th>비밀번호</th>
+    <td><input type="password" id="editpwd"></td>
+  </tr>
+  <tr>
+    <th>내용</th>
+    <td><input type="text" id="editcontent"></td>
+  </tr>
+  <tr>
+    <th>수정</th>
+    <td>
+      <input type="button" value="확인" id="editbtn" onclick="edit()">
+      <input type="button" value="취소" onclick="cancel()">
+    </td>
+  </tr>
+</table>
+
+<script>
+  let cnt = 1;
+  function a() {
+    let writer = f.writer.value;
+    let pwd = f.pwd.value;
+    let content = f.content.value;
+    let el = mkDiv(writer, pwd, content);
+    document.getElementById("list").appendChild(el);
+    f.writer.value = "";
+    f.pwd.value = "";
+    f.content.value = "";
+  }
+
+  function mkDiv(writer, pwd, content) {
+    let newDiv = document.createElement("div");
+    newDiv.id = "d_" + cnt;
+    newDiv.pwd = pwd;
+
+    let html = "";
+    html += "<strong>작성자:</strong> <span id='w_" + cnt + "'>" + writer + "</span> ";
+    html += "<strong>내용:</strong> <span id='c_" + cnt + "'>" + content + "</span><br/>";
+    html += "<div style='margin-top: 7px;'>";
+    html += "<input type='button' value='수정' onclick=editForm(" + cnt + ")>";
+    html += "<input type='button' value='삭제' onclick=del(" + cnt + ")>";
+    html += "</div>";
+
+    newDiv.innerHTML = html;
+    cnt++;
+    return newDiv;
+  }
+
+  function editForm(cnt) {
+    let editDiv = document.getElementById("d_" + cnt);
+    let editForm = document.getElementById("editf");
+    editDiv.appendChild(editForm);
+    document.getElementById("editwriter").value = document.getElementById("w_" + cnt).innerHTML;
+    document.getElementById("editcontent").value = document.getElementById("c_" + cnt).innerHTML;
+    document.getElementById("editbtn").cnt = cnt;
+    editForm.style.display = '';
+  }
+
+  function cancel() {
+    document.getElementById("editf").style.display = 'none';
+    document.body.appendChild(document.getElementById("editf"));
+  }
+
+  function edit() {
+    let cnt = document.getElementById("editbtn").cnt;
+    let editDiv = document.getElementById("d_" + cnt);
+    let pwd2 = document.getElementById("editpwd").value;
+    if (editDiv.pwd !== pwd2) {
+      alert("비밀번호가 틀렸습니다.");
+    } else {
+      document.getElementById("w_" + cnt).innerHTML = document.getElementById("editwriter").value;
+      document.getElementById("c_" + cnt).innerHTML = document.getElementById("editcontent").value;
+    }
+    document.getElementById("editwriter").value = "";
+    document.getElementById("editcontent").value = "";
+    document.getElementById("editpwd").value = "";
+    cancel();
+  }
+
+  function del(cnt) {
+    let pwd = prompt("삭제를 위해 비밀번호를 입력하세요:");
+    let delDiv = document.getElementById("d_" + cnt);
+    if (pwd === delDiv.pwd) {
+      document.getElementById("list").removeChild(delDiv);
+    } else {
+      alert("비밀번호가 틀렸습니다. 삭제 취소됨.");
+    }
+  }
+
+  // 벚꽃 애니메이션
+  const canvas = document.getElementById("sakura");
+  const ctx = canvas.getContext("2d");
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+  let petals = [];
+
+  function createPetal() {
+    return {
+      x: Math.random() * width,
+      y: Math.random() * height - height,
+      r: Math.random() * 4 + 2,
+      d: Math.random() * 2 + 1,
+      speed: Math.random() * 1 + 0.5,
+      drift: Math.random() * 1 - 0.5
+    };
+  }
+
+  for (let i = 0; i < 100; i++) petals.push(createPetal());
+
+  function drawPetals() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "rgba(255,182,193,0.8)";
+    ctx.beginPath();
+    for (let p of petals) {
+      ctx.moveTo(p.x, p.y);
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    }
+    ctx.fill();
+    updatePetals();
+  }
+
+  function updatePetals() {
+    for (let p of petals) {
+      p.y += p.speed;
+      p.x += p.drift;
+      if (p.y > height || p.x > width || p.x < 0) {
+        Object.assign(p, createPetal(), { y: 0 });
+      }
+    }
+  }
+
+  function animate() {
+    drawPetals();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+</script>
+
+</body>
+</html>
